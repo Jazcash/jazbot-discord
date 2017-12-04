@@ -1,0 +1,24 @@
+{
+  "name": "jazbot-discord",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "@types/node": "^8.0.54",
+    "discord.js": "^11.2.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jazcash/jazbot-discord.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jazcash/jazbot-discord/issues"
+  },
+  "homepage": "https://github.com/Jazcash/jazbot-discord#readme"
+}
