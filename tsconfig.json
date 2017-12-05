@@ -1,11 +1,11 @@
 {
 	"compilerOptions": {
-		"target": "esnext",
-		"module": "esnext",
+		"target": "es2017",
+		"module": "commonjs",
 		"strict": true,
 		"noImplicitAny": true,
 		"outDir": "build",
-		//"watch": true,
+		"watch": true,
 		"sourceMap": true
 	},
 	"exclude": [
