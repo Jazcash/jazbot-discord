@@ -20,9 +20,7 @@ const jazbot = new Commando.CommandoClient({
 
 jazbot.registry
 	.registerGroups([
-		['fun', 'Fun commands'],
-		['some', 'Some group'],
-		['other', 'Some other group']
+		['misc', 'Various commands']
 	])
 	.registerDefaults()
 	.registerCommandsIn(path.join(__dirname, 'commands'));
