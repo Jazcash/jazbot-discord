@@ -6,7 +6,8 @@
 		"noImplicitAny": true,
 		"outDir": "build",
 		"watch": true,
-		"sourceMap": true
+		"sourceMap": true,
+		"rootDir": "src"
 	},
 	"exclude": [
 		"node_modules"

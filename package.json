@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "@types/argparse": "^1.0.33",
     "@types/node": "^8.0.54",
     "discord.js": "^11.2.1",
+    "discord.js-commando": "github:gawdl3y/discord.js-commando",
     "node-opus": "0.2.7"
   },
   "devDependencies": {},
