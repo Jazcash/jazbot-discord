@@ -21,7 +21,7 @@ module.exports = class Sc2Command extends Command {
 		let voiceChannel = msg.member.voiceChannel;
 		voiceChannel.join().then(connection => {
 			const dispatcher = connection.playFile(getRandomSoundFile());
-			dispatcher.setVolume(0.2);
+			dispatcher.setVolume(0.5);
 			dispatcher.on("end", end => {
 				voiceChannel.leave();
 			});
