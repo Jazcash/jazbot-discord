@@ -24,7 +24,8 @@ module.exports = class RollCommand extends Command {
 	}
 
 	public async run(msg: CommandMessage, { text }:any): Promise<Message | Message[]> {
-		console.log(text);
-		return msg.say(text);
+		let options = text.split(" ");
+		let choice = options[Math.floor(Math.random() * options.length)];
+		return msg.say(choice);
 	}
 };
