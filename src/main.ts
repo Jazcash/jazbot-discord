@@ -1,4 +1,5 @@
 import * as path from "path";
+import { ArgumentType } from "discord.js-commando";
 
 const config = require("../config");
 const Commando = require("discord.js-commando");

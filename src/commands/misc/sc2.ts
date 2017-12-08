@@ -9,22 +9,15 @@ module.exports = class Sc2Command extends Command {
 			group: 'misc',
 			memberName: 'sc2',
 			description: 'Says a thing',
-			examples: ["say Hi there!"],
+			examples: ["Plays a Starcraft 2 sound effect in voice chat"],
 			throttling: {
 				usages: 5,
 				duration: 10
-			},
-			args: [
-				{
-					key: 'text',
-					prompt: 'What text would you like the bot to say?',
-					type: 'string'
-				}
-			]
+			}
 		});
 	}
 
-	public async run(msg: CommandMessage, { text }:any){
+	public async run(msg: CommandMessage){
 		let voiceChannel = msg.member.voiceChannel;
 		voiceChannel.join().then(connection => {
 			const dispatcher = connection.playFile(getRandomSoundFile());
