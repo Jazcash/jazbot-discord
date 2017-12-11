@@ -1,6 +1,7 @@
 import { Guild, Message } from 'discord.js';
 import { Command, CommandMessage, CommandoClient } from 'discord.js-commando';
 import * as request from "request-promise-native";
+const config = require("../../../config");
 
 let players: {[s: string]: string} = {
 	Jazcash: "1631893",
@@ -31,7 +32,7 @@ module.exports = class SC2Command extends Command {
 		});
 	}
 
-	public async run(msg: CommandMessage, { player }:{ player: string }): Promise<Message | Message[]> {
+	async run(msg: CommandMessage, { player }:{ player: string }): Promise<Message | Message[]> {
 		if (!(player in players)){
 			return msg.reply(`Could not find player: ${player}`);
 		}
@@ -40,31 +41,73 @@ module.exports = class SC2Command extends Command {
 			uri: `https://eu.api.battle.net/sc2/profile/${players[player]}/1/${player}/ladders`,
 			qs: {
 				locale: 'en_GB',
-				apikey: "buexg2zyhycd9ag7nqxqz8theyqpwmj2"
+				apikey: config.blizzardkey
 			},
 			headers: {
 				'User-Agent': 'Request-Promise'
 			},
-			json: true // Automatically parses the JSON string in the response
+			json: true
 		};
 
-		async function getProfile(){
-			try{
-				const result = await request(options);
-				return result;
-			} catch(err){
-				console.error(err);
+		try{
+			const result = await request(options);
+			let soloSeasonLadder: SeasonLadder | undefined;
+
+			for (let list of result.currentSeason){
+				for (let ladder of list.ladder){
+					if (ladder.matchMakingQueue === "LOTV_SOLO"){
+						soloSeasonLadder = ladder;
+					}
+				}
 			}
+
+			if (typeof soloSeasonLadder === "undefined") return msg.reply("Error!");
+
+			return msg.embed({
+				title: `SC2 Season Stats for ${player}`,
+				fields: [
+					{
+						name: "League",
+						value: soloSeasonLadder.league,
+						inline: false
+					},
+					// {
+					// 	name: "Division",
+					// 	value: soloSeasonLadder.division,
+					// 	inline: true
+					// },
+					{
+						name: "Rank",
+						value: soloSeasonLadder.rank,
+						inline: true
+					},
+					{
+						name: "Wins",
+						value: soloSeasonLadder.wins,
+						inline: true
+					},
+					{
+						name: "Losses",
+						value: soloSeasonLadder.losses,
+						inline: true
+					}
+				]
+			});
+		} catch(err){
+			console.error(err);
+			return msg.reply(err);
 		}
-
-		getProfile().then((v) => {
-			console.log(v);
-			let currentseason = v.currentSeason[0].ladder[0];
-			return msg.reply(currentseason);
-		}).catch(err => {
-			console.log(err);
-		});
-
-		return null;
 	}
 };
+
+interface SeasonLadder{
+	division: number;
+	ladderId: number;
+	ladderName: string;
+	league: string;
+	losses: number;
+	matchMakingQueue: string;
+	rank: number;
+	showcase: boolean;
+	wins: number;
+}

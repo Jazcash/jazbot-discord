@@ -23,4 +23,4 @@ jazbot.on("ready", () => {
 	console.log("Jazbot is ready!");
 });
 
-jazbot.login(config.key);
+jazbot.login(config.discordkey);
