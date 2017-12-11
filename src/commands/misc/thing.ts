@@ -1,6 +1,6 @@
+import * as fs from "fs";
 import { Guild, Message } from 'discord.js';
 import { Command, CommandMessage, CommandoClient } from 'discord.js-commando';
-import * as request from "request-promise-native";
 
 module.exports = class ThingCommand extends Command {
 	constructor(client:CommandoClient) {
@@ -8,52 +8,40 @@ module.exports = class ThingCommand extends Command {
 			name: 'thing',
 			group: 'misc',
 			memberName: 'thing',
-			description: 'Show sc2 ranks',
-			examples: ["thing jazcash"],
+			description: 'Says a thing',
+			examples: ["Plays a Starcraft 2 sound effect in voice chat"],
 			throttling: {
 				usages: 5,
 				duration: 10
-			},
-			args: [
-				{
-					key: 'player',
-					prompt: 'Provide a battle.net player',
-					type: 'string'
-				}
-			]
+			}
 		});
 	}
 
-	public async run(msg: CommandMessage, { player }:any): Promise<Message | Message[]> {
-		let options = {
-			uri: 'https://eu.api.battle.net/sc2/profile/1631893/1/Jazcash/ladders',
-			qs: {
-				locale: 'en_GB',
-				apikey: "buexg2zyhycd9ag7nqxqz8theyqpwmj2"
-			},
-			headers: {
-				'User-Agent': 'Request-Promise'
-			},
-			json: true // Automatically parses the JSON string in the response
-		};
-
-		async function getProfile(){
-			try{
-				const result = await request(options);
-				return result;
-			} catch(err){
-				console.error(err);
-			}
-		}
-
-		getProfile().then((v) => {
-			console.log(v);
-			let currentseason = v.currentSeason[0].ladder[0];
-			msg.reply(currentseason);
+	public async run(msg: CommandMessage){
+		let voiceChannel = msg.member.voiceChannel;
+		voiceChannel.join().then(connection => {
+			const dispatcher = connection.playFile(getRandomSoundFile());
+			dispatcher.setVolume(0.5);
+			dispatcher.on("end", end => {
+				voiceChannel.leave();
+			});
 		}).catch(err => {
 			console.log(err);
 		});
 
-		msg.reply("fuck");
+		return msg.reply("FUCK");
 	}
 };
+
+const sounds:{ [s: string]: string[] } = {};
+fs.readdir("sounds", (err, dirs) => {
+	for (let dir of dirs){
+		fs.readdir(`sounds/${dir}`, (err, files) => {
+			sounds[dir] = files;
+		});
+	}
+});
+
+function getRandomSoundFile(){
+	return `sounds/starcraft/${sounds.starcraft[Math.floor(Math.random() * sounds.starcraft.length)]}`;
+}
