@@ -1,0 +1,10 @@
+Rocket League Leaderboard
+=========================
+Player        Won  Lost
+------        ---  ----
+Jazcash       45   3
+AverageJay    27   2
+MightySheep   32   2
+Shox          12   2
+Raffeh        3    23
+Jonos         0    3
